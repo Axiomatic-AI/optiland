@@ -24,7 +24,6 @@ dependencies = [
     "matplotlib",
     "vtk",
     "tabulate",
-    "numba",
     "requests",
     "seaborn"
 ]

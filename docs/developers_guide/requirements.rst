@@ -27,7 +27,6 @@ The following Python libraries are required to use Optiland. These dependencies 
 - `pandas` (for data manipulation)
 - `pyyaml` (for reading and writing YAML files)
 - `tabulate` (for tabular data formatting)
-- `numba` (for just-in-time compilation)
 - `requests` (for HTTP requests)
 - `seaborn` (for statistical data visualization)
 
