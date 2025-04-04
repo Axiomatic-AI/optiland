@@ -1,14 +1,14 @@
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "optiland"
-version = "0.3.0"
+version = "0.3.1"
 authors = [
-  { name="Kramer Harrison", email="kdanielharrison@gmail.com" },
+  { name = "Kramer Harrison", email = "kdanielharrison@gmail.com" },
 ]
-description = ""
+description = "Open Source Optical Design in Python"
 readme = "README.md"
 requires-python = ">=3.9"
 classifiers = [
@@ -16,7 +16,6 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "setuptools",
     "numpy",
     "scipy",
     "pandas",
@@ -30,26 +29,34 @@ dependencies = [
 license = { text = "MIT License" }
 
 [project.urls]
-"Homepage" = "https://github.com/HarrisonKramer/optiland"
+Homepage = "https://github.com/HarrisonKramer/optiland"
 
-[tool.setuptools]
-packages = [
-    "optiland",
-    "optiland.analysis",
-    "optiland.database",
-    "optiland.fileio",
-    "optiland.geometries",
-    "optiland.materials",
-    "optiland.optimization.operand",
-    "optiland.optimization.variable",
-    "optiland.optimization",
-    "optiland.physical_apertures",
-    "optiland.rays",
-    "optiland.samples",
-    "optiland.surfaces",
-    "optiland.tolerancing",
-    "optiland.visualization"
+[project.optional-dependencies]
+dev = [
+    "codecov>=2.1.13",
+    "pytest>=8.3.5",
 ]
 
-[tool.setuptools.package-data]
-"optiland.database" = ["*.csv", "*.yml", "**/*.yml", "*.npy"]
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["optiland"]  # Auto-discovers subpackages
+
+[tool.hatch.metadata.files]
+"optiland/database" = ["*.csv", "*.yml", "**/*.yml", "*.npy"]
+
+[tool.ruff]
+line-length = 88
+exclude = ["tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle
+    "F",  # Pyflakes
+    "UP", # pyupgrade
+    "B",  # flake8-bugbear
+    "SIM",# flake8-simplify
+    "I",  # isort
+]
+exclude = ["*.ipynb"]

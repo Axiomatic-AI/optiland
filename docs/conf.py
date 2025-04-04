@@ -2,7 +2,6 @@ import os
 import sys
 from datetime import datetime
 
-
 sys.path.insert(0, os.path.abspath("../"))
 sys.path.insert(0, os.path.abspath("../optiland/"))
 
@@ -10,7 +9,7 @@ project = "Optiland"
 current_year = datetime.now().year
 copyright = f"2024-{current_year}, Kramer Harrison & contributors"
 author = "Kramer Harrison"
-release = "0.3.0"
+release = "0.3.1"
 
 extensions = [
     "sphinx.ext.autodoc",
@@ -37,7 +36,14 @@ sphinx_gallery_conf = {
     "gallery_dirs": "auto_examples",  # gallery output directory
 }
 
-autodoc_mock_imports = ["numpy", "yaml", "scipy", "matplotlib", "pandas", "vtk"]
+autodoc_mock_imports = [
+    "numpy",
+    "yaml",
+    "scipy",
+    "matplotlib",
+    "pandas",
+    "vtk",
+]
 
 pygments_style = "sphinx"
 

@@ -14,11 +14,11 @@ from optiland.rays import RealRays
 
 
 def get_point_lambertian():  # pragma: no cover
-    """
-    Generates a random point on the 2D unit disk.
+    """Generates a random point on the 2D unit disk.
 
     Returns:
         tuple: A tuple containing the x, y coordinates of the generated point.
+
     """
     r = np.random.rand()
     theta = np.random.uniform(0, 2 * np.pi)
@@ -28,12 +28,12 @@ def get_point_lambertian():  # pragma: no cover
 
 
 def get_point_gaussian(sigma):  # pragma: no cover
-    """
-    Generates a random point from a 2D Gaussian distribution using the
+    """Generates a random point from a 2D Gaussian distribution using the
     Box-Muller transform.
 
     Returns:
         tuple: A tuple containing the x, y coordinates of the generated point.
+
     """
     u1, u2 = np.random.uniform(0, 1, 2)
     r = np.sqrt(-2 * np.log(u1))
@@ -53,8 +53,7 @@ def func_wrapper(func, *args):  # pragma: no cover
 
 
 def scatter(L, M, N, nx, ny, nz, get_point):  # pragma: no cover
-    """
-    Generate a scattered vector in the global coordinate system.
+    """Generate a scattered vector in the global coordinate system.
 
     Args:
         L (float): x-component of ray direction cosines.
@@ -67,6 +66,7 @@ def scatter(L, M, N, nx, ny, nz, get_point):  # pragma: no cover
 
     Returns:
         s (numpy.ndarray): Scattered vector in the global coordinate system.
+
     """
     while True:
         # Generate point on unit disk
@@ -75,10 +75,7 @@ def scatter(L, M, N, nx, ny, nz, get_point):  # pragma: no cover
         r = np.array((L, M, N))
 
         # Arbitrary vector to use as a reference for the cross product
-        if L < 0.999:
-            arbitrary_vector = np.array((1, 0, 0))
-        else:
-            arbitrary_vector = np.array((0, 1, 0))
+        arbitrary_vector = np.array((1, 0, 0)) if L < 0.999 else np.array((0, 1, 0))
 
         # First basis vector for the local coordinate system
         a = np.cross(n, arbitrary_vector)
@@ -104,8 +101,7 @@ def scatter(L, M, N, nx, ny, nz, get_point):  # pragma: no cover
 
 
 def scatter_parallel(L, M, N, nx, ny, nz, get_point):  # pragma: no cover
-    """
-    Perform scatter operation in parallel.
+    """Perform scatter operation in parallel.
 
     Args:
         L (numpy.ndarray): Array of L values.
@@ -118,6 +114,7 @@ def scatter_parallel(L, M, N, nx, ny, nz, get_point):  # pragma: no cover
 
     Returns:
         numpy.ndarray: Array of scattered vectors.
+
     """
     size = len(L)
     v = np.empty((size, 3), dtype=np.float64)
@@ -126,9 +123,8 @@ def scatter_parallel(L, M, N, nx, ny, nz, get_point):  # pragma: no cover
     return v
 
 
-class BaseBSDF(ABC):
-    """
-    Abstract base class for Bidirectional Scattering Distribution Function
+class BaseBSDF(ABC):  # noqa: B024
+    """Abstract base class for Bidirectional Scattering Distribution Function
     (BSDF).
 
     Attributes:
@@ -137,6 +133,7 @@ class BaseBSDF(ABC):
     Methods:
         scatter(rays, nx=None, ny=None, nz=None): scatter rays according to
             the BSDF.
+
     """
 
     _registry = {}
@@ -147,8 +144,7 @@ class BaseBSDF(ABC):
         BaseBSDF._registry[cls.__name__] = cls
 
     def scatter(self, rays: RealRays, nx: np.ndarray, ny: np.ndarray, nz: np.ndarray):
-        """
-        Scatter rays according to the BSDF.
+        """Scatter rays according to the BSDF.
 
         Args:
             rays (RealRays): The rays to be scattered.
@@ -158,6 +154,7 @@ class BaseBSDF(ABC):
 
         Returns:
             RealRays: The updated rays after scattering is applied.
+
         """
         if np.isscalar(nx):
             nx = np.full_like(rays.L, nx)
@@ -167,7 +164,13 @@ class BaseBSDF(ABC):
             nz = np.full_like(rays.L, nz)
 
         scattered_vec = scatter_parallel(
-            rays.L, rays.M, rays.N, nx, ny, nz, self.scattering_function
+            rays.L,
+            rays.M,
+            rays.N,
+            nx,
+            ny,
+            nz,
+            self.scattering_function,
         )
         rays.L = scattered_vec[:, 0]
         rays.M = scattered_vec[:, 1]
@@ -175,26 +178,23 @@ class BaseBSDF(ABC):
         return rays
 
     def to_dict(self):
-        """
-        Convert the BSDF to a dictionary.
+        """Convert the BSDF to a dictionary.
 
         Returns:
             dict: A dictionary representation of the BSDF.
+
         """
         return {"type": self.__class__.__name__}
 
     @classmethod
     def from_dict(cls, data):
-        """
-        Create a BSDF object from a dictionary.
-        """
+        """Create a BSDF object from a dictionary."""
         bsdf_type = data["type"]
         return cls._registry[bsdf_type].from_dict(data)
 
 
 class LambertianBSDF(BaseBSDF):
-    """
-    Lambertian Bidirectional Scattering Distribution Function (BSDF) class.
+    """Lambertian Bidirectional Scattering Distribution Function (BSDF) class.
 
     This class represents a Lambertian BSDF, which is generally used to model
     diffuse scattering.
@@ -204,11 +204,11 @@ class LambertianBSDF(BaseBSDF):
         self.scattering_function = get_point_lambertian
 
     def to_dict(self):
-        """
-        Convert the BSDF to a dictionary.
+        """Convert the BSDF to a dictionary.
 
         Returns:
             dict: A dictionary representation of the BSDF.
+
         """
         return {
             "type": "LambertianBSDF",
@@ -216,15 +216,12 @@ class LambertianBSDF(BaseBSDF):
 
     @classmethod
     def from_dict(cls, data):
-        """
-        Create a LambertianBSDF object from a dictionary.
-        """
+        """Create a LambertianBSDF object from a dictionary."""
         return cls()
 
 
 class GaussianBSDF(BaseBSDF):
-    """
-    Gaussian Bidirectional Scattering Distribution Function (BSDF) class.
+    """Gaussian Bidirectional Scattering Distribution Function (BSDF) class.
 
     This class represents a Gaussian BSDF, which models scattering based on a
     2D Gaussian distribution.
@@ -235,11 +232,11 @@ class GaussianBSDF(BaseBSDF):
         self.scattering_function = func_wrapper(get_point_gaussian, sigma)
 
     def to_dict(self):
-        """
-        Convert the BSDF to a dictionary.
+        """Convert the BSDF to a dictionary.
 
         Returns:
             dict: A dictionary representation of the BSDF.
+
         """
         return {
             "type": "GaussianBSDF",
@@ -248,7 +245,5 @@ class GaussianBSDF(BaseBSDF):
 
     @classmethod
     def from_dict(cls, data):
-        """
-        Create a GaussianBSDF object from a dictionary.
-        """
+        """Create a GaussianBSDF object from a dictionary."""
         return cls(data["sigma"])

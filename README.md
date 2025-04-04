@@ -5,6 +5,7 @@
 ![Stars](https://img.shields.io/github/stars/HarrisonKramer/optiland.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14588961.svg)](https://doi.org/10.5281/zenodo.14588961)
+[![Python Versions](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%7C%203.12%20%7C%203.13%20-blue)](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%7C%203.12%20%7C%203.13%20-blue)
 
 
 <div align="center">
@@ -194,6 +195,7 @@ This guide gives a step-by-step approach to learning how to use Optiland.
 Optiland is continually evolving to provide new functionalities for optical design and analysis. Below are some of the planned features and enhancements we aim to implement in future versions:
 
 - [ ] **GUI (PySide6-based)**
+- [ ] **Multi-Path Sequential Ray Tracing**
 - [ ] **Multiple Configurations (Zoom Lenses)**
 - [ ] **Thin Film Design and Optimization** 
 - [ ] **Diffractive Optical Elements**
